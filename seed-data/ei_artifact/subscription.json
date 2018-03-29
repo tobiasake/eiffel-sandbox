@@ -1,0 +1,20 @@
+[  
+  {
+    "subscriptionName" : "Subscription2",
+	"repeat" : false,
+    "created" : "1520953110",
+	"notificationType" : "REST_POST",
+	"notificationMeta" : "http://eiffel-jenkins:8080/job/ei-artifact-triggered-job/build",
+    "notificationMessage" : "@",
+    "requirements" : [ 
+        {
+            "conditions" : [ 
+                {
+                    "jmespath" : "gav.groupId=='com.othercompany.library'"
+                }
+            ]
+        }
+    ]
+    
+}
+]

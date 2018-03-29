@@ -1,0 +1,431 @@
+#################################################################################################
+#
+# Copyright 2018 Ericsson AB.
+# For a full list of individual contributors, please see the commit history.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+##################################################################################################
+# Eiffel Sandbox 
+#
+# run:         docker-compose up         
+# stop:        docker-compose stop
+# stop/remove: docker-compose down --volumes
+#
+# Cleanup/Remove (if needed):
+#     Dangling Volumes:   docker volume rm `docker volume ls -q -f dangling=true`            
+#     Unused Images:      docker images -q | xargs docker rmi
+#     Stopped containers: docker rm `docker ps -a -q` 
+#
+# Maintainer: michael.frick@ericsson.com
+##################################################################################################
+version: "2"
+services:
+  mymongodb-mongodb:
+    restart: always
+    image: mongo:latest
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - mymongodb-mongodb:27017
+  mongo-seed:
+    image: mongo:latest
+    links:
+      - mymongodb-mongodb
+    volumes:
+      - ./seed-data:/seed-data
+      - ./seed-data/ei_artifact:/seed-data/ei_artifact
+      - ./seed-data/ei_sourcechange:/seed-data/ei_sourcechange
+      - ./seed-data/ei_testexecution:/seed-data/ei_testexecution
+    command:   #  Do NOT SEED ER without user & psw specified in application.yml, DB and tables will be created with generated PSW if not specified. json filename = collection
+      bash -c "mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/aggregated_objects.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/event_object_map.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/wait_list.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/ei_artifact/subscription.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db MissedNotification-artifact --type json --file /seed-data/Notification.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-sourcechange --type json --file /seed-data/aggregated_objects.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-sourcechange --type json --file /seed-data/event_object_map.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-sourcechange --type json --file /seed-data/wait_list.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-sourcechange --type json --file /seed-data/ei_sourcechange/subscription.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db MissedNotification-sourcechange --type json --file /seed-data/Notification.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/aggregated_objects.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/event_object_map.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/wait_list.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/ei_testexecution/subscription.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db MissedNotification-testexecution --type json --file /seed-data/Notification.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel --type json --file /seed-data/events.json --jsonArray"    
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - mongo-seed
+
+              
+  myrabbitmq-rabbitmq:
+    restart: always
+    image: rabbitmq:3.6.2-management
+    expose:
+      - "15672"
+      - "5672"    
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - myrabbitmq-rabbitmq:5672
+              - myrabbitmq-rabbitmq:15672
+    environment:
+      - RABBITMQ_DEFAULT_PASS=myuser
+      - RABBITMQ_DEFAULT_USER=myuser
+      - RABBITMQ_DEFAULT_VHOST=/
+ 
+ 
+  ####### /Start Eiffel Intelligence Artifact ###############################################################################
+  eiffel-intelligence-artifact:
+    restart: always
+    image: eiffelericsson/eiffel-intelligence-artifact:latest
+    expose:
+      - "8090"        
+    ports:
+      - "8070:8090"
+    depends_on:
+      - myrabbitmq-rabbitmq
+      - mymongodb-mongodb
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - eiffel-intelligence-artifact:8090
+    environment:       # Overrides settings in application config file
+      - SpringApplicationName=eiffel-intelligence-artifact
+      - rules.path=/ArtifactRules_new.json
+      - rabbitmq.host=myrabbitmq-rabbitmq
+      - rabbitmq.port=5672
+      - rabbitmq.user=myuser
+      - rabbitmq.password=myuser
+      - mongodb.host=mymongodb-mongodb
+      - mongodb.port=27017
+      - rabbitmq.componentName=eiffelintelligence-artifact
+      - rabbitmq.waitlist.queue.suffix=waitlist-artifact
+      - database.name=eiffel_intelligence-artifact
+      - missedNotificationDataBaseName=MissedNotification-artifact
+      - spring.mail.host=
+      - spring.mail.port=
+      - spring.mail.username=      
+      - spring.mail.password=
+      - pring.mail.properties.mail.smtp.auth=false
+      - spring.mail.properties.mail.smtp.starttls.enable=false      
+      
+  ei-frontend-artifact:
+    restart: always
+    image: eiffelericsson/eiffel-intelligence-frontend-artifact:latest 
+    expose:
+      - "8080"        
+    ports:
+      - "8071:8080"
+    depends_on:
+      - eiffel-intelligence-artifact
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - ei-frontend-artifact:8080
+    environment:      # Overrides settings in application config file
+      - spring.application.name=eiffel-intelligence-frontend-artifact
+      - ei.frontendServiceHost=${HOST}
+      - ei.frontendServicePort=8071
+      - ei.backendServerHost=eiffel-intelligence-artifact
+      - ei.backendServerPort=8090    
+  
+####### /Stop Eiffel Intelligence Artifact ###############################################################################
+
+
+####### /Start Eiffel Intelligence Source Change ###############################################################################
+  eiffel-intelligence-sourcechange:
+    restart: always
+    image: eiffelericsson/eiffel-intelligence-sourcechange:latest  
+    expose:
+      - "8090"        
+    ports:
+      - "8072:8090"
+    depends_on:
+      - myrabbitmq-rabbitmq
+      - mymongodb-mongodb
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - eiffel-intelligence-sourcechange:8090
+    environment:       # Overrides settings in application config file
+      - SpringApplicationName=eiffel-intelligence-sourcechange
+      - rules.path=/TestSourceChangeObjectRules.json
+      - rabbitmq.host=myrabbitmq-rabbitmq
+      - rabbitmq.port=5672
+      - rabbitmq.user=myuser
+      - rabbitmq.password=myuser
+      - mongodb.host=mymongodb-mongodb
+      - mongodb.port=27017
+      - rabbitmq.componentName=eiffelintelligence-sourcechange
+      - rabbitmq.waitlist.queue.suffix=waitlist-sourcechange
+      - database.name=eiffel_intelligence-sourcechange
+      - missedNotificationDataBaseName=MissedNotification-sourcechange
+      - spring.mail.host=
+      - spring.mail.port=
+      - spring.mail.username=      
+      - spring.mail.password=
+      - pring.mail.properties.mail.smtp.auth=false
+      - spring.mail.properties.mail.smtp.starttls.enable=false      
+      
+  ei-frontend-sourcechange:
+    restart: always
+    image: eiffelericsson/eiffel-intelligence-frontend-sourcechange:latest
+    expose:
+      - "8080"        
+    ports:
+      - "8073:8080"
+    depends_on:
+      - eiffel-intelligence-sourcechange
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - ei-frontend-sourcechange:8080
+    environment:      # Overrides settings in application config file
+      - spring.application.name=eiffel-intelligence-frontend-sourcechange
+      - ei.frontendServiceHost=${HOST}
+      - ei.frontendServicePort=8073
+      - ei.backendServerHost=eiffel-intelligence-sourcechange
+      - ei.backendServerPort=8090    
+  
+####### /Stop Eiffel Intelligence Source Change ###############################################################################
+
+
+####### /Start Eiffel Intelligence Test Execution ###############################################################################
+  eiffel-intelligence-testexecution:
+    restart: always
+    image: eiffelericsson/eiffel-intelligence-testexecution:latest  
+    expose:
+      - "8090"        
+    ports:
+      - "8074:8090"
+    depends_on:
+      - myrabbitmq-rabbitmq
+      - mymongodb-mongodb
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - eiffel-intelligence-testexecution:8090
+    environment:       # Overrides settings in application config file
+      - SpringApplicationName=eiffel-intelligence-testexecution
+      - rules.path=/TestExecutionObjectRules.json
+      - rabbitmq.host=myrabbitmq-rabbitmq
+      - rabbitmq.port=5672
+      - rabbitmq.user=myuser
+      - rabbitmq.password=myuser
+      - mongodb.host=mymongodb-mongodb
+      - mongodb.port=27017
+      - rabbitmq.componentName=eiffelintelligence-testexecution
+      - rabbitmq.waitlist.queue.suffix=waitlist-testexecution
+      - database.name=eiffel_intelligence-testexecution
+      - missedNotificationDataBaseName=MissedNotification-testexecution  
+      - spring.mail.host=
+      - spring.mail.port=
+      - spring.mail.username=      
+      - spring.mail.password=
+      - pring.mail.properties.mail.smtp.auth=false
+      - spring.mail.properties.mail.smtp.starttls.enable=false      
+      
+  ei-frontend-testexecution:
+    restart: always
+    image: eiffelericsson/eiffel-intelligence-frontend-testexecution:latest
+    expose:
+      - "8080"        
+    ports:
+      - "8075:8080"
+    depends_on:
+      - eiffel-intelligence-testexecution
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - ei-frontend-sourcechange:8080
+    environment:      # Overrides settings in application config file
+      - spring.application.name=eiffel-intelligence-frontend-testexecution
+      - ei.frontendServiceHost=${HOST}
+      - ei.frontendServicePort=8075
+      - ei.backendServerHost=eiffel-intelligence-testexecution
+      - ei.backendServerPort=8090    
+  
+####### /Stop Eiffel Intelligence Test Execution ###############################################################################
+  
+  eiffel-vici:
+    restart: always
+    image: eiffelericsson/eiffel-vici:latest
+    expose:
+      - "8080"    
+    ports:
+      - "8092:8080"
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - eiffel-vici:8080
+  dummy-er:
+    restart: always
+    image: eiffelericsson/dummy-er:latest      
+    expose:
+      - "8081"        
+    ports:
+      - "8093:8081"
+    depends_on:
+      - eiffel-er
+      - eiffel-vici
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - dummy-er:8081
+    environment:       # Overrides settings in application config file
+      - mongodb=true
+      - mongodb.host=mymongodb-mongodb
+      - mongodb.port=27017
+      - database.name=eiffel
+      - collection.name=events       
+      
+  generate: 
+    restart: always
+    image: eiffelericsson/eiffel-remrem-generate:latest
+    expose:
+      - "8080"        
+    ports:
+      - "8095:8080"            
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - generate:8080
+   
+  
+  publish:  
+    restart: always
+    image: eiffelericsson/eiffel-remrem-publish:latest
+    expose:
+      - "8080"        
+    ports:
+      - "8096:8080"    
+    depends_on:
+      - myrabbitmq-rabbitmq
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - publish:8080
+       
+  eiffel-er:
+    restart: always
+    image: eiffelericsson/eiffel-er:0.0.26
+    expose:
+      - "8080"        
+    ports:
+      - "8084:8080"     
+    depends_on:  
+      - myrabbitmq-rabbitmq
+      - mymongodb-mongodb 
+      - eiffel-intelligence-artifact      
+      - eiffel-intelligence-testexecution
+      - eiffel-intelligence-sourcechange
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - eiffel-er:8080 
+    environment:   # Overrides settings in config file in catalina folder. OBS --> skip quotes for rabbitmq.bindingKey value  
+                   # No config file copied to catalina folder in Dockerfile, only uses env vars below ;-)
+                   # /eventrepository removed in contextpath
+       - server.contextPath=/    
+       - server.port=8080
+       - rabbitmq.host=myrabbitmq-rabbitmq
+       - rabbitmq.componentName=eventrepository
+       - rabbitmq.port=5672
+       - rabbitmq.domainId=er001-eiffel2xxx
+       - rabbitmq.durable=true
+       - rabbitmq.user=myuser
+       - rabbitmq.password=myuser
+       - rabbitmq.exchangeName=ei-poc-4
+       - rabbitmq.bindingKey=#             
+       - rabbitmq.autoDelete=false
+       - rabbitmq.createExchangeIfNotExisting=true
+       - rabbitmq.consumerName=messageConsumer     
+       - mongodb.host=mymongodb-mongodb
+       - mongodb.port=27017
+       - mongodb.database=eiffel
+       - mongodb.collection=events
+       - mongodb.user                
+       - mongodb.password    
+       - mongodb.indexes=meta.id,links.target,links.type,meta.time,data.gav.groupId,data.gav.artifactId       
+       - mongodb.externalERs
+       - search.limit=100
+       - search.levels=10
+       - eventrepo2.URL=https://eiffel.lmera.ericsson.se/com.ericsson.duraci/eiffel-erri/index.html
+       - index.staticIndex.indexOn=false
+       - index.staticIndex.filePath=src/main/resources/static_indexes.json
+       - index.dynamicIndex.indexOn=false
+       - index.dynamicIndex.indexCreationDay=SUNDAY
+       - index.dynamicIndex.indexCreationTime=11:50:00
+       - index.dynamicIndex.maxIndexesCount=5
+       - index.dynamicIndex.filePath=src/main/resources/dynamic_indexing.json
+       - index.dynamicIndex.fileUpdatePeriod=30
+     
+               
+  eiffel-jenkins:
+    restart: always
+    image: eiffelericsson/eiffel-jenkins:0.0.44
+    expose:
+      - "8080"        
+    ports:
+      - "8082:8080"    
+      - "50001:50000"          
+    depends_on:  
+      - myrabbitmq-rabbitmq  
+      - mymongodb-mongodb
+      - eiffel-er  
+      - generate
+      - publish      
+      - mynexus3
+      - eiffel-intelligence-artifact
+      - eiffel-intelligence-testexecution
+      - eiffel-intelligence-sourcechange
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - eiffel-jenkins:8080 
+              - eiffel-jenkins:50000
+#    volumes:                                   
+#      - jenkins_home:/var/jenkins_home       
+       
+
+  mynexus3:      
+    restart: always
+    image: sonatype/nexus3:3.3.1
+    expose:
+      - "8081"        
+    ports:
+      - "8081:8081"
+    depends_on:  
+      - myrabbitmq-rabbitmq 
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - mynexus3:8081
+    
+#    volumes:                                   
+#      - /opt/my-nexus-data:/nexus-data       
+
+
+    
+networks:
+  eiffel_2.0_1:  
