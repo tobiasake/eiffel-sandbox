@@ -328,7 +328,7 @@ services:
        
   eiffel-er:
     restart: always
-    image: eiffelericsson/eiffel-er:0.0.26
+    image: eiffelericsson/eiffel-er:0.0.27
     expose:
       - "8080"        
     ports:
@@ -383,7 +383,7 @@ services:
                
   eiffel-jenkins:
     restart: always
-    image: eiffelericsson/eiffel-jenkins:0.0.44
+    image: eiffelericsson/eiffel-jenkins:0.0.47
     expose:
       - "8080"        
     ports:
