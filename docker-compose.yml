@@ -29,7 +29,7 @@
 #
 # Maintainer: michael.frick@ericsson.com
 ##################################################################################################
-version: "2"
+version: "2.1"
 services:
   mymongodb-mongodb:
     restart: always
@@ -38,6 +38,11 @@ services:
       - "27017"
     ports:
       - "27017:27017"
+    healthcheck: 
+        test: ["CMD-SHELL","echo", "'db.stats().ok' | mongo localhost:27017/test", "--quiet"]
+        interval: 30s
+        timeout: 10s
+        retries: 5    
     networks:
           eiffel_2.0_1:
             aliases:
@@ -83,6 +88,11 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    healthcheck:
+        test: ["CMD-SHELL", "if rabbitmqctl status; then \nexit 0 \nfi \nexit 1"]
+        interval: 30s
+        timeout: 10s
+        retries: 5  
     networks:
           eiffel_2.0_1:
             aliases:
@@ -103,8 +113,10 @@ services:
     ports:
       - "8070:8090"
     depends_on:
-      - myrabbitmq-rabbitmq
-      - mymongodb-mongodb
+      mymongodb-mongodb:
+          condition: service_healthy
+      myrabbitmq-rabbitmq:
+          condition: service_healthy
     networks:
           eiffel_2.0_1:
             aliases:
@@ -161,8 +173,10 @@ services:
     ports:
       - "8072:8090"
     depends_on:
-      - myrabbitmq-rabbitmq
-      - mymongodb-mongodb
+      mymongodb-mongodb:
+          condition: service_healthy
+      myrabbitmq-rabbitmq:
+          condition: service_healthy
     networks:
           eiffel_2.0_1:
             aliases:
@@ -219,8 +233,10 @@ services:
     ports:
       - "8074:8090"
     depends_on:
-      - myrabbitmq-rabbitmq
-      - mymongodb-mongodb
+      mymongodb-mongodb:
+          condition: service_healthy
+      myrabbitmq-rabbitmq:
+          condition: service_healthy
     networks:
           eiffel_2.0_1:
             aliases:
@@ -320,7 +336,8 @@ services:
     ports:
       - "8096:8080"    
     depends_on:
-      - myrabbitmq-rabbitmq
+      myrabbitmq-rabbitmq:
+          condition: service_healthy
     networks:
           eiffel_2.0_1:
             aliases:
@@ -415,8 +432,9 @@ services:
       - "8081"        
     ports:
       - "8081:8081"
-    depends_on:  
-      - myrabbitmq-rabbitmq 
+    depends_on:
+      myrabbitmq-rabbitmq:
+          condition: service_healthy
     networks:
           eiffel_2.0_1:
             aliases:
