@@ -412,7 +412,7 @@ services:
        - index.dynamicIndex.fileUpdatePeriod=30
      
                
-  eiffel-jenkins:
+  eiffel-jenkins1:
     restart: always
     image: eiffelericsson/eiffel-jenkins:0.0.47
     expose:
@@ -433,11 +433,37 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - eiffel-jenkins:8080 
-              - eiffel-jenkins:50000
+              - eiffel-jenkins1:8080 
+              - eiffel-jenkins1:50000
 #    volumes:                                   
 #      - jenkins_home:/var/jenkins_home       
        
+  eiffel-jenkins2:
+    restart: always
+    image: eiffelericsson/eiffel-jenkins:0.0.47
+    expose:
+      - "8080"        
+    ports:
+      - "8083:8080"    
+      - "50002:50000"          
+    depends_on:  
+      - myrabbitmq-rabbitmq  
+      - mymongodb-mongodb
+      - eiffel-er  
+      - generate
+      - publish      
+      - mynexus3
+      - eiffel-intelligence-artifact
+      - eiffel-intelligence-testexecution
+      - eiffel-intelligence-sourcechange
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - eiffel-jenkins2:8080 
+              - eiffel-jenkins2:50000
+#    volumes:                                   
+#      - jenkins_home:/var/jenkins_home   
+
 
   mynexus3:      
     restart: always
