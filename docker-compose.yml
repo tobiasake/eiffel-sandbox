@@ -42,7 +42,7 @@ services:
         test: ["CMD-SHELL","echo", "'db.stats().ok' | mongo localhost:27017/test", "--quiet"]
         interval: 30s
         timeout: 10s
-        retries: 5    
+        retries: 5        
     networks:
           eiffel_2.0_1:
             aliases:
@@ -72,7 +72,21 @@ services:
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/wait_list.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/ei_testexecution/subscription.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db MissedNotification-testexecution --type json --file /seed-data/Notification.json --jsonArray &&
-               mongoimport --host mymongodb-mongodb:27017 --db eiffel --type json --file /seed-data/events.json --jsonArray"    
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel --type json --file /seed-data/events.json --jsonArray &&
+               mongo eiffel --host mymongodb-mongodb:27017  --eval \"db.events.remove({})\" &&                          
+               mongo MissedNotification-artifact --host mymongodb-mongodb:27017  --eval \"db.Notification.remove({})\" &&
+               mongo MissedNotification-sourcechange --host mymongodb-mongodb:27017  --eval \"db.Notification.remove({})\" &&
+               mongo MissedNotification-testexecution --host mymongodb-mongodb:27017  --eval \"db.Notification.remove({})\" &&                             
+               mongo eiffel_intelligence-artifact --host mymongodb-mongodb:27017  --eval \"db.aggregated_objects.remove({})\" &&
+               mongo eiffel_intelligence-artifact --host mymongodb-mongodb:27017  --eval \"db.event_object_map.remove({})\" &&
+               mongo eiffel_intelligence-artifact --host mymongodb-mongodb:27017  --eval \"db.wait_list.remove({})\" &&        
+               mongo eiffel_intelligence-sourcechange --host mymongodb-mongodb:27017  --eval \"db.aggregated_objects.remove({})\" &&
+               mongo eiffel_intelligence-sourcechange --host mymongodb-mongodb:27017  --eval \"db.event_object_map.remove({})\" &&
+               mongo eiffel_intelligence-sourcechange --host mymongodb-mongodb:27017  --eval \"db.wait_list.remove({})\" &&        
+               mongo eiffel_intelligence-testexecution --host mymongodb-mongodb:27017  --eval \"db.aggregated_objects.remove({})\" &&
+               mongo eiffel_intelligence-testexecution --host mymongodb-mongodb:27017  --eval \"db.event_object_map.remove({})\" &&
+               mongo eiffel_intelligence-testexecution --host mymongodb-mongodb:27017  --eval \"db.wait_list.remove({})\"                                                
+               "    
     networks:
           eiffel_2.0_1:
             aliases:
