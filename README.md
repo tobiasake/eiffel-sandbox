@@ -45,7 +45,7 @@ This will started multiple Eiffel services and tools with Eiffel plugins. The co
 * <a href="https://jenkins.io">Jenkins</a> 1 with <a href="https://github.com/eiffel-community/eiffel-jenkins-plugin">Eiffel Jenkins Plugin</a>: 8082
 * <a href="https://jenkins.io">Jenkins</a> 2 with <a href="https://github.com/eiffel-community/eiffel-jenkins-plugin">Eiffel Jenkins Plugin</a>: 8083
 * <a href="https://github.com/eiffel-community/eiffel-vici">Eiffel Vici</a>: 8092
-* <a href="https://github.com/eiffel-community/eiffel-vici">Eiffel Event Repository</a>: 8084
+* <a href="https://github.com/eiffel-community/eiffel-event-repository">Eiffel Event Repository</a>: 8084
 * <a href="https://github.com/Ericsson/eiffel-remrem">Remrem</a> Generate: 8095
 * <a href="https://github.com/Ericsson/eiffel-remrem">Remrem</a> Publish: 8096
 * <a href="https://rabbitmq.com">RabbitMQ</a>: 15672
