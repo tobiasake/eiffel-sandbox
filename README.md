@@ -33,6 +33,19 @@ This repository forms part of the Eiffel Community. Eiffel is a protocol for tec
 Visit [Eiffel Community](https://eiffel-community.github.io) to get started and get involved.
 
 # How to Run
-To be added...
+To run the Eiffel Sandbox, you need Docker and Docker Compose.
+1. Clone the repo: `git clone https://github.com/eiffel-community/eiffel-sandbox.git`
+2. In the repo root, run Docker Compose: `docker-compose up`
 
-# How it Works
+This will started multiple Eiffel services and tools with Eiffel plugins. The containers of primary interest can be accessed at the exposed ports below. Note that the hostname depends on your local environment. For additional containers and detailed port configurations, please refer to <a href="docker-compose.yml">docker-compose.yml</a>.
+* <a href="https://github.com/Ericsson/eiffel-intelligence">Eiffel Intelligence</a> Artifact Frontend: 8071
+* <a href="https://github.com/Ericsson/eiffel-intelligence">Eiffel Intelligence</a> Source Change Frontend: 8073
+* <a href="https://github.com/Ericsson/eiffel-intelligence">Eiffel Intelligence</a> Test Execution Frontend: 8075
+* <a href="https://www.sonatype.com/nexus-repository-sonatype">Nexus Repository</a>: 8081
+* <a href="https://jenkins.io">Jenkins</a> 1 with <a href="https://github.com/eiffel-community/eiffel-jenkins-plugin">Eiffel Jenkins Plugin</a>: 8082
+* <a href="https://jenkins.io">Jenkins</a> 2 with <a href="https://github.com/eiffel-community/eiffel-jenkins-plugin">Eiffel Jenkins Plugin</a>: 8083
+* <a href="https://github.com/eiffel-community/eiffel-vici">Eiffel Vici</a>: 8092
+* <a href="https://github.com/eiffel-community/eiffel-vici">Eiffel Event Repository</a>: 8084
+* <a href="https://github.com/Ericsson/eiffel-remrem">Remrem</a> Generate: 8095
+* <a href="https://github.com/Ericsson/eiffel-remrem">Remrem</a> Publish: 8096
+* <a href="https://rabbitmq.com">RabbitMQ</a>: 15672
