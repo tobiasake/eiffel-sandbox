@@ -36,6 +36,9 @@ Visit [Eiffel Community](https://eiffel-community.github.io) to get started and 
 To run the Eiffel Sandbox, you need Docker and Docker Compose.
 1. Clone the repo: `git clone https://github.com/eiffel-community/eiffel-sandbox.git`
 2. In the repo root, run Docker Compose: `docker-compose up`
+To run specific services, add the service name to the command. For instance, to run only the event repository: `docker-compose up eiffel-er`. Service names can be found in <a href="docker-compose.yml">docker-compose.yml</a>.
+
+To stop the services, hit `ctrl + c`, then run `docker-compose down --volumes`. Note that this will keep the images cached, which will shorten the startup time. Further volume and image management via regular Docker commands (see <a href="https://docs.docker.com/">Docker Documentation</a>).
 
 This will started multiple Eiffel services and tools with Eiffel plugins. The containers of primary interest can be accessed at the exposed ports below. Note that the hostname depends on your local environment. For additional containers and detailed port configurations, please refer to <a href="docker-compose.yml">docker-compose.yml</a>.
 * <a href="https://github.com/Ericsson/eiffel-intelligence">Eiffel Intelligence</a> Artifact Frontend: 8071
