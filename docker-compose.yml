@@ -56,36 +56,62 @@ services:
       - ./seed-data/ei_artifact:/seed-data/ei_artifact
       - ./seed-data/ei_sourcechange:/seed-data/ei_sourcechange
       - ./seed-data/ei_testexecution:/seed-data/ei_testexecution
+      - ./seed-data/ei_allevents:/seed-data/ei_allevents
     command:   #  Do NOT SEED ER without user & psw specified in application.yml, DB and tables will be created with generated PSW if not specified. json filename = collection
-      bash -c "mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/aggregated_objects.json --jsonArray &&
+      bash -c "mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/sessions.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/aggregated_objects.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/event_object_map.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/wait_list.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/ei_artifact/subscription.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-artifact --type json --file /seed-data/subscription_repeat_handler.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db MissedNotification-artifact --type json --file /seed-data/Notification.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-sourcechange --type json --file /seed-data/sessions.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-sourcechange --type json --file /seed-data/aggregated_objects.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-sourcechange --type json --file /seed-data/event_object_map.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-sourcechange --type json --file /seed-data/wait_list.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-sourcechange --type json --file /seed-data/ei_sourcechange/subscription.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-sourcechange --type json --file /seed-data/subscription_repeat_handler.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db MissedNotification-sourcechange --type json --file /seed-data/Notification.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/sessions.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/aggregated_objects.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/event_object_map.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/wait_list.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/ei_testexecution/subscription.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-testexecution --type json --file /seed-data/subscription_repeat_handler.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db MissedNotification-testexecution --type json --file /seed-data/Notification.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-allevents --type json --file /seed-data/sessions.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-allevents --type json --file /seed-data/aggregated_objects.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-allevents --type json --file /seed-data/event_object_map.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-allevents --type json --file /seed-data/wait_list.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-allevents --type json --file /seed-data/ei_allevents/subscription.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-allevents --type json --file /seed-data/subscription_repeat_handler.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db eiffel_intelligence-allevents --type json --file /seed-data/subscription_repeat_handler.json --jsonArray &&
+               mongoimport --host mymongodb-mongodb:27017 --db MissedNotification-allevents --type json --file /seed-data/Notification.json --jsonArray &&
                mongoimport --host mymongodb-mongodb:27017 --db eiffel --type json --file /seed-data/events.json --jsonArray &&
                mongo eiffel --host mymongodb-mongodb:27017  --eval \"db.events.remove({})\" &&                          
                mongo MissedNotification-artifact --host mymongodb-mongodb:27017  --eval \"db.Notification.remove({})\" &&
                mongo MissedNotification-sourcechange --host mymongodb-mongodb:27017  --eval \"db.Notification.remove({})\" &&
-               mongo MissedNotification-testexecution --host mymongodb-mongodb:27017  --eval \"db.Notification.remove({})\" &&                             
+               mongo MissedNotification-testexecution --host mymongodb-mongodb:27017  --eval \"db.Notification.remove({})\" &&
+               mongo eiffel_intelligence-artifact --host mymongodb-mongodb:27017  --eval \"db.sessions.remove({})\" &&               
                mongo eiffel_intelligence-artifact --host mymongodb-mongodb:27017  --eval \"db.aggregated_objects.remove({})\" &&
                mongo eiffel_intelligence-artifact --host mymongodb-mongodb:27017  --eval \"db.event_object_map.remove({})\" &&
-               mongo eiffel_intelligence-artifact --host mymongodb-mongodb:27017  --eval \"db.wait_list.remove({})\" &&        
+               mongo eiffel_intelligence-artifact --host mymongodb-mongodb:27017  --eval \"db.wait_list.remove({})\" && 
+               mongo eiffel_intelligence-artifact --host mymongodb-mongodb:27017  --eval \"db.subscription_repeat_handler.remove({})\" &&     
+               mongo eiffel_intelligence-sourcechange --host mymongodb-mongodb:27017  --eval \"db.sessions.remove({})\" &&               
                mongo eiffel_intelligence-sourcechange --host mymongodb-mongodb:27017  --eval \"db.aggregated_objects.remove({})\" &&
                mongo eiffel_intelligence-sourcechange --host mymongodb-mongodb:27017  --eval \"db.event_object_map.remove({})\" &&
-               mongo eiffel_intelligence-sourcechange --host mymongodb-mongodb:27017  --eval \"db.wait_list.remove({})\" &&        
+               mongo eiffel_intelligence-sourcechange --host mymongodb-mongodb:27017  --eval \"db.wait_list.remove({})\" &&  
+               mongo eiffel_intelligence-sourcechange --host mymongodb-mongodb:27017  --eval \"db.subscription_repeat_handler.remove({})\" &&
+               mongo eiffel_intelligence-testexecution --host mymongodb-mongodb:27017  --eval \"db.sessions.remove({})\" &&               
                mongo eiffel_intelligence-testexecution --host mymongodb-mongodb:27017  --eval \"db.aggregated_objects.remove({})\" &&
                mongo eiffel_intelligence-testexecution --host mymongodb-mongodb:27017  --eval \"db.event_object_map.remove({})\" &&
-               mongo eiffel_intelligence-testexecution --host mymongodb-mongodb:27017  --eval \"db.wait_list.remove({})\"                                                
+               mongo eiffel_intelligence-testexecution --host mymongodb-mongodb:27017  --eval \"db.wait_list.remove({})\" &&   
+               mongo eiffel_intelligence-testexecution --host mymongodb-mongodb:27017  --eval \"db.subscription_repeat_handler.remove({})\" && 
+               mongo eiffel_intelligence-allevents --host mymongodb-mongodb:27017  --eval \"db.sessions.remove({})\" &&
+               mongo eiffel_intelligence-allevents --host mymongodb-mongodb:27017  --eval \"db.aggregated_objects.remove({})\" &&
+               mongo eiffel_intelligence-allevents --host mymongodb-mongodb:27017  --eval \"db.event_object_map.remove({})\" &&
+               mongo eiffel_intelligence-allevents --host mymongodb-mongodb:27017  --eval \"db.wait_list.remove({})\" &&
+               mongo eiffel_intelligence-allevents --host mymongodb-mongodb:27017  --eval \"db.subscription_repeat_handler.remove({})\"               
                "    
     networks:
           eiffel_2.0_1:
@@ -121,7 +147,7 @@ services:
   ####### /Start Eiffel Intelligence Artifact ###############################################################################
   eiffel-intelligence-artifact:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-artifact:latest
+    image: eiffelericsson/eiffel-intelligence-backend:0.0.11
     expose:
       - "8090"        
     ports:
@@ -142,22 +168,23 @@ services:
       - rabbitmq.port=5672
       - rabbitmq.user=myuser
       - rabbitmq.password=myuser
-      - mongodb.host=mymongodb-mongodb
-      - mongodb.port=27017
+      - spring.data.mongodb.host=mymongodb-mongodb
+      - spring.data.mongodb.port=27017
+      - spring.data.mongodb.database=eiffel_intelligence-artifact
       - rabbitmq.componentName=eiffelintelligence-artifact
       - rabbitmq.waitlist.queue.suffix=waitlist-artifact
-      - database.name=eiffel_intelligence-artifact
       - missedNotificationDataBaseName=MissedNotification-artifact
       - spring.mail.host=
       - spring.mail.port=
       - spring.mail.username=      
       - spring.mail.password=
       - pring.mail.properties.mail.smtp.auth=false
-      - spring.mail.properties.mail.smtp.starttls.enable=false      
+      - spring.mail.properties.mail.smtp.starttls.enable=false   
+      - er.url=http://eiffel-er:8080/search/      
       
   ei-frontend-artifact:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-frontend-artifact:latest 
+    image: eiffelericsson/eiffel-intelligence-frontend:0.0.11
     expose:
       - "8080"        
     ports:
@@ -181,7 +208,7 @@ services:
 ####### /Start Eiffel Intelligence Source Change ###############################################################################
   eiffel-intelligence-sourcechange:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-sourcechange:latest  
+    image: eiffelericsson/eiffel-intelligence-backend:0.0.11  
     expose:
       - "8090"        
     ports:
@@ -202,22 +229,23 @@ services:
       - rabbitmq.port=5672
       - rabbitmq.user=myuser
       - rabbitmq.password=myuser
-      - mongodb.host=mymongodb-mongodb
-      - mongodb.port=27017
+      - spring.data.mongodb.host=mymongodb-mongodb
+      - spring.data.mongodb.port=27017
+      - spring.data.mongodb.database=eiffel_intelligence-sourcechange
       - rabbitmq.componentName=eiffelintelligence-sourcechange
       - rabbitmq.waitlist.queue.suffix=waitlist-sourcechange
-      - database.name=eiffel_intelligence-sourcechange
       - missedNotificationDataBaseName=MissedNotification-sourcechange
       - spring.mail.host=
       - spring.mail.port=
       - spring.mail.username=      
       - spring.mail.password=
       - pring.mail.properties.mail.smtp.auth=false
-      - spring.mail.properties.mail.smtp.starttls.enable=false      
+      - spring.mail.properties.mail.smtp.starttls.enable=false  
+      - er.url=http://eiffel-er:8080/search/      
       
   ei-frontend-sourcechange:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-frontend-sourcechange:latest
+    image: eiffelericsson/eiffel-intelligence-frontend:0.0.11
     expose:
       - "8080"        
     ports:
@@ -241,7 +269,7 @@ services:
 ####### /Start Eiffel Intelligence Test Execution ###############################################################################
   eiffel-intelligence-testexecution:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-testexecution:latest  
+    image: eiffelericsson/eiffel-intelligence-backend:0.0.11 
     expose:
       - "8090"        
     ports:
@@ -262,22 +290,23 @@ services:
       - rabbitmq.port=5672
       - rabbitmq.user=myuser
       - rabbitmq.password=myuser
-      - mongodb.host=mymongodb-mongodb
-      - mongodb.port=27017
+      - spring.data.mongodb.host=mymongodb-mongodb
+      - spring.data.mongodb.port=27017
+      - spring.data.mongodb.database=eiffel_intelligence-testexecution
       - rabbitmq.componentName=eiffelintelligence-testexecution
       - rabbitmq.waitlist.queue.suffix=waitlist-testexecution
-      - database.name=eiffel_intelligence-testexecution
       - missedNotificationDataBaseName=MissedNotification-testexecution  
       - spring.mail.host=
       - spring.mail.port=
       - spring.mail.username=      
       - spring.mail.password=
       - pring.mail.properties.mail.smtp.auth=false
-      - spring.mail.properties.mail.smtp.starttls.enable=false      
+      - spring.mail.properties.mail.smtp.starttls.enable=false  
+      - er.url=http://eiffel-er:8080/search/      
       
   ei-frontend-testexecution:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-frontend-testexecution:latest
+    image: eiffelericsson/eiffel-intelligence-frontend:0.0.11
     expose:
       - "8080"        
     ports:
@@ -296,7 +325,69 @@ services:
       - ei.backendServerPort=8090    
   
 ####### /Stop Eiffel Intelligence Test Execution ###############################################################################
-  
+
+####### /Start Eiffel Intelligence All Events ###############################################################################
+  eiffel-intelligence-allevents:
+    restart: always
+    image: eiffelericsson/eiffel-intelligence-backend:0.0.11
+    expose:
+      - "8090"
+    ports:
+      - "8076:8090"
+    depends_on:
+      mymongodb-mongodb:
+          condition: service_healthy
+      myrabbitmq-rabbitmq:
+          condition: service_healthy
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - eiffel-intelligence-allevents:8090
+    environment:       # Overrides settings in application config file
+      - SpringApplicationName=eiffel-intelligence-allevents
+      - rules.path=/all_event_rules.json
+      - rabbitmq.domainId=ei001-eiffel2
+      - rabbitmq.componentName=eiffelintelligence-allevents
+      - rabbitmq.waitlist.queue.suffix=waitlist-allevents
+      - rabbitmq.host=myrabbitmq-rabbitmq
+      - rabbitmq.port=5672
+      - rabbitmq.user=myuser
+      - rabbitmq.password=myuser
+      - spring.data.mongodb.host=mymongodb-mongodb
+      - spring.data.mongodb.port=27017
+      - spring.data.mongodb.database=eiffel_intelligence-allevents
+      - missedNotificationDataBaseName=MissedNotification-allevents
+      - spring.mail.host=mail.lmera.ericsson.se
+      - spring.mail.port=25
+      - spring.mail.username=
+      - spring.mail.password=
+      - spring.mail.properties.mail.smtp.auth=false
+      - spring.mail.properties.mail.smtp.starttls.enable=false
+      - er.url=http://eiffel-er:8080/search/
+
+  ei-frontend-allevents:
+    restart: always
+    image: eiffelericsson/eiffel-intelligence-frontend:0.0.11
+    expose:
+      - "8080"
+    ports:
+      - "8077:8080"
+    depends_on:
+      - eiffel-intelligence-allevents
+    networks:
+          eiffel_2.0_1:
+            aliases:
+              - ei-frontend-sourcechange:8080
+    environment:      # Overrides settings in application config file
+      - spring.application.name=eiffel-intelligence-frontend-allevents
+      - ei.frontendServiceHost=${HOST}
+      - ei.frontendServicePort=8077
+      - ei.backendServerHost=eiffel-intelligence-allevents
+      - ei.backendServerPort=8090
+
+####### /Stop Eiffel Intelligence All Events ###############################################################################  
+
+
   eiffel-vici:
     restart: always
     image: eiffelericsson/eiffel-vici:latest
@@ -331,7 +422,7 @@ services:
       
   generate: 
     restart: always
-    image: eiffelericsson/eiffel-remrem-generate:latest
+    image: eiffelericsson/eiffel-remrem-generate:0.10.1
     expose:
       - "8080"        
     ports:
@@ -344,7 +435,7 @@ services:
   
   publish:  
     restart: always
-    image: eiffelericsson/eiffel-remrem-publish:latest
+    image: eiffelericsson/eiffel-remrem-publish:0.6.1
     expose:
       - "8080"        
     ports:
@@ -359,7 +450,7 @@ services:
        
   eiffel-er:
     restart: always
-    image: eiffelericsson/eiffel-er:0.0.27
+    image: eiffelericsson/eiffel-er:0.0.43
     expose:
       - "8080"        
     ports:
