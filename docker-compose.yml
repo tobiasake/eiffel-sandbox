@@ -33,7 +33,7 @@ version: "2.1"
 services:
   mymongodb-mongodb:
     restart: always
-    image: mongo:latest
+    image: mongo:${MONGODB_VERSION}
     expose:
       - "27017"
     ports:
@@ -48,7 +48,7 @@ services:
             aliases:
               - mymongodb-mongodb:27017
   mongo-seed:
-    image: mongo:latest
+    image: mongo:${MONGODB_VERSION}
     links:
       - mymongodb-mongodb
     volumes:
@@ -121,7 +121,7 @@ services:
               
   myrabbitmq-rabbitmq:
     restart: always
-    image: rabbitmq:3.6.2-management
+    image: rabbitmq:${RABBITMQ_VERSION}
     expose:
       - "15672"
       - "5672"    
@@ -147,7 +147,7 @@ services:
   ####### /Start Eiffel Intelligence Artifact ###############################################################################
   eiffel-intelligence-artifact:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-backend:0.0.11
+    image: eiffelericsson/eiffel-intelligence-backend:${EI_BACKEND_VERSION}
     expose:
       - "8090"        
     ports:
@@ -184,7 +184,7 @@ services:
       
   ei-frontend-artifact:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-frontend:0.0.11
+    image: eiffelericsson/eiffel-intelligence-frontend:${EI_FRONTEND_VERSION}
     expose:
       - "8080"        
     ports:
@@ -208,7 +208,7 @@ services:
 ####### /Start Eiffel Intelligence Source Change ###############################################################################
   eiffel-intelligence-sourcechange:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-backend:0.0.11  
+    image: eiffelericsson/eiffel-intelligence-backend:${EI_BACKEND_VERSION}
     expose:
       - "8090"        
     ports:
@@ -245,7 +245,7 @@ services:
       
   ei-frontend-sourcechange:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-frontend:0.0.11
+    image: eiffelericsson/eiffel-intelligence-frontend:${EI_FRONTEND_VERSION}
     expose:
       - "8080"        
     ports:
@@ -269,7 +269,7 @@ services:
 ####### /Start Eiffel Intelligence Test Execution ###############################################################################
   eiffel-intelligence-testexecution:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-backend:0.0.11 
+    image: eiffelericsson/eiffel-intelligence-backend:${EI_BACKEND_VERSION}
     expose:
       - "8090"        
     ports:
@@ -306,7 +306,7 @@ services:
       
   ei-frontend-testexecution:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-frontend:0.0.11
+    image: eiffelericsson/eiffel-intelligence-frontend:${EI_FRONTEND_VERSION}
     expose:
       - "8080"        
     ports:
@@ -329,7 +329,7 @@ services:
 ####### /Start Eiffel Intelligence All Events ###############################################################################
   eiffel-intelligence-allevents:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-backend:0.0.11
+    image: eiffelericsson/eiffel-intelligence-backend:${EI_BACKEND_VERSION}
     expose:
       - "8090"
     ports:
@@ -367,7 +367,7 @@ services:
 
   ei-frontend-allevents:
     restart: always
-    image: eiffelericsson/eiffel-intelligence-frontend:0.0.11
+    image: eiffelericsson/eiffel-intelligence-frontend:${EI_FRONTEND_VERSION}
     expose:
       - "8080"
     ports:
@@ -390,7 +390,7 @@ services:
 
   eiffel-vici:
     restart: always
-    image: eiffelericsson/eiffel-vici:latest
+    image: eiffelericsson/eiffel-vici:${EIFFEL_VICI_VERSION}
     expose:
       - "8080"    
     ports:
@@ -401,7 +401,7 @@ services:
               - eiffel-vici:8080
   dummy-er:
     restart: always
-    image: eiffelericsson/dummy-er:latest      
+    image: eiffelericsson/dummy-er:${DUMMY_ER_VERSION}
     expose:
       - "8081"        
     ports:
@@ -422,7 +422,7 @@ services:
       
   generate: 
     restart: always
-    image: eiffelericsson/eiffel-remrem-generate:0.10.1
+    image: eiffelericsson/eiffel-remrem-generate:${REMREM_GENERATE_VERSION}
     expose:
       - "8080"        
     ports:
@@ -435,7 +435,7 @@ services:
   
   publish:  
     restart: always
-    image: eiffelericsson/eiffel-remrem-publish:0.6.1
+    image: eiffelericsson/eiffel-remrem-publish:${REMREM_PUBLISH_VERSION}
     expose:
       - "8080"        
     ports:
@@ -450,7 +450,7 @@ services:
        
   eiffel-er:
     restart: always
-    image: eiffelericsson/eiffel-er:0.0.43
+    image: eiffelericsson/eiffel-er:${EIFFEL_ER_VERSION}
     expose:
       - "8080"        
     ports:
@@ -505,7 +505,7 @@ services:
                
   eiffel-jenkins1:
     restart: always
-    image: eiffelericsson/eiffel-jenkins:0.0.47
+    image: eiffelericsson/eiffel-jenkins:${EIFFEL_JENKINS_VERSION}
     expose:
       - "8080"        
     ports:
@@ -521,6 +521,28 @@ services:
       - eiffel-intelligence-artifact
       - eiffel-intelligence-testexecution
       - eiffel-intelligence-sourcechange
+    environment:
+#      - JAVA_OPTS="-Djava.util.logging.config.file=/var/jenkins_home/log.properties"
+      - NEXUS_DESCRIPTION=mynexus3
+      - NEXUS_URL=http://mynexus3:8081/
+      - NEXUS_USER=admin
+      - NEXUS_PASSWORD=admin123
+      - RABBITMQ_HOST=myrabbitmq-rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_EXCHANGE_NAME=ei-poc-4
+      - RABBITMQ_COMPONENT_NAME=myrabbitmq-rabbitmq
+      - RABBITMQ_PROTOCOL=amqp
+      - RABBITMQ_CREATE_EXCHANGE=false
+      - RABBITMQ_USER=myuser
+      - RABBITMQ_PASSWORD=myuser
+      - RABBITMQ_DOMAIN_ID=er001-eiffelxxx
+      - REMREM_GENERATE_URL=http://generate:8080/eiffelsemantics
+      - REMREM_PUBLISH_URL=http://publish:8080/producer/msg?mp=eiffelsemantics
+      - REMREM_USER=guest
+      - REMREM_PASSWORD=guest
+      - ER_REST_URL=http://eiffel-er:8080/
+      - BYPASS_IO=false
+      - FEM_VERSION=${EIFFEL_JENKINS_VERSION}
     networks:
           eiffel_2.0_1:
             aliases:
@@ -531,7 +553,7 @@ services:
        
   eiffel-jenkins2:
     restart: always
-    image: eiffelericsson/eiffel-jenkins:0.0.47
+    image: eiffelericsson/eiffel-jenkins:${EIFFEL_JENKINS_VERSION}
     expose:
       - "8080"        
     ports:
@@ -558,7 +580,7 @@ services:
 
   mynexus3:      
     restart: always
-    image: sonatype/nexus3:3.3.1
+    image: sonatype/nexus3:${NEXUS_VERSION}
     expose:
       - "8081"        
     ports:
