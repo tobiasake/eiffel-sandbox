@@ -1,6 +1,9 @@
 
-SCRIPT=$(readlink -f $0)
-SCRIPTPATH=`dirname $SCRIPT`
-source ${SCRIPTPATH}/eiffel-versions.bash
+source ./eiffel-versions.bash
 
-export HOST=$(hostname -I | tr " " "\n"| head -1)
+if [[ "${DOCKER_HOST}" ]];
+then
+  export HOST=$(echo ${DOCKER_HOST} | sed -e 's|^tcp\://||;s|:.*$||');
+else
+  export HOST=$(hostname -I | tr " " "\n"| head -1);
+fi

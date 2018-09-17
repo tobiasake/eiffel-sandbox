@@ -32,6 +32,12 @@ This repository forms part of the Eiffel Community. Eiffel is a protocol for tec
 
 Visit [Eiffel Community](https://eiffel-community.github.io) to get started and get involved.
 
+# Pre-requisites
+Docker and Docker-Compose tool is required to use Eiffel Sandbox:
+* <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu">Docker CE Linux Ubuntu installation guide</a>
+* <a href="https://docs.docker.com/docker-for-windows/install">Docker for Windows installation guide</a>
+* <a href="https://docs.docker.com/compose/install">Docker-Compose tool Linux and Windows installation guide</a>
+
 # How to Run
 To run the Eiffel Sandbox, you need Docker and Docker Compose.
 1. Clone the repo: `git clone https://github.com/eiffel-community/eiffel-sandbox.git`
