@@ -163,45 +163,32 @@ services:
               - eiffel-intelligence-artifact:8090
     environment:       # Overrides settings in application config file
       - SpringApplicationName=eiffel-intelligence-artifact
+      - server.port=8090
       - rules.path=/ArtifactRules_new.json
       - rabbitmq.host=myrabbitmq-rabbitmq
       - rabbitmq.port=5672
+      - rabbitmq.domainId=eiffel-sandbox
+      - rabbitmq.componentName=eiffelintelligence-artifact
+      - rabbitmq.waitlist.queue.suffix=waitlist-artifact    
       - rabbitmq.user=myuser
       - rabbitmq.password=myuser
       - spring.data.mongodb.host=mymongodb-mongodb
       - spring.data.mongodb.port=27017
       - spring.data.mongodb.database=eiffel_intelligence-artifact
-      - rabbitmq.componentName=eiffelintelligence-artifact
-      - rabbitmq.waitlist.queue.suffix=waitlist-artifact
       - missedNotificationDataBaseName=MissedNotification-artifact
+      - search.query.prefix=object
+      - aggregated.object.name=aggregatedObject
       - spring.mail.host=
       - spring.mail.port=
       - spring.mail.username=      
       - spring.mail.password=
-      - pring.mail.properties.mail.smtp.auth=false
+      - spring.mail.properties.mail.smtp.auth=false
       - spring.mail.properties.mail.smtp.starttls.enable=false   
-      - er.url=http://eiffel-er:8080/search/      
+      - er.url=http://eiffel-er:8080/search/
+      - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
+      - WAIT_DB_HOSTS=mymongodb-mongodb:27017
+#      - EI_CMD_ARGS=DEBUG    
       
-  ei-frontend-artifact:
-    restart: always
-    image: eiffelericsson/eiffel-intelligence-frontend:${EI_FRONTEND_VERSION}
-    expose:
-      - "8080"        
-    ports:
-      - "8071:8080"
-    depends_on:
-      - eiffel-intelligence-artifact
-    networks:
-          eiffel_2.0_1:
-            aliases:
-              - ei-frontend-artifact:8080
-    environment:      # Overrides settings in application config file
-      - spring.application.name=eiffel-intelligence-frontend-artifact
-      - ei.frontendServiceHost=${HOST}
-      - ei.frontendServicePort=8071
-      - ei.backendServerHost=eiffel-intelligence-artifact
-      - ei.backendServerPort=8090    
-  
 ####### /Stop Eiffel Intelligence Artifact ###############################################################################
 
 
@@ -224,45 +211,32 @@ services:
               - eiffel-intelligence-sourcechange:8090
     environment:       # Overrides settings in application config file
       - SpringApplicationName=eiffel-intelligence-sourcechange
+      - server.port=8090
       - rules.path=/TestSourceChangeObjectRules.json
       - rabbitmq.host=myrabbitmq-rabbitmq
       - rabbitmq.port=5672
+      - rabbitmq.domainId=eiffel-sandbox
+      - rabbitmq.componentName=eiffelintelligence-sourcechange
+      - rabbitmq.waitlist.queue.suffix=waitlist-sourcechange
       - rabbitmq.user=myuser
       - rabbitmq.password=myuser
       - spring.data.mongodb.host=mymongodb-mongodb
       - spring.data.mongodb.port=27017
       - spring.data.mongodb.database=eiffel_intelligence-sourcechange
-      - rabbitmq.componentName=eiffelintelligence-sourcechange
-      - rabbitmq.waitlist.queue.suffix=waitlist-sourcechange
       - missedNotificationDataBaseName=MissedNotification-sourcechange
+      - search.query.prefix=object
+      - aggregated.object.name=aggregatedObject
       - spring.mail.host=
       - spring.mail.port=
       - spring.mail.username=      
       - spring.mail.password=
       - pring.mail.properties.mail.smtp.auth=false
       - spring.mail.properties.mail.smtp.starttls.enable=false  
-      - er.url=http://eiffel-er:8080/search/      
+      - er.url=http://eiffel-er:8080/search/
+      - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
+      - WAIT_DB_HOSTS=mymongodb-mongodb:27017
+#      - EI_CMD_ARGS=DEBUG 
       
-  ei-frontend-sourcechange:
-    restart: always
-    image: eiffelericsson/eiffel-intelligence-frontend:${EI_FRONTEND_VERSION}
-    expose:
-      - "8080"        
-    ports:
-      - "8073:8080"
-    depends_on:
-      - eiffel-intelligence-sourcechange
-    networks:
-          eiffel_2.0_1:
-            aliases:
-              - ei-frontend-sourcechange:8080
-    environment:      # Overrides settings in application config file
-      - spring.application.name=eiffel-intelligence-frontend-sourcechange
-      - ei.frontendServiceHost=${HOST}
-      - ei.frontendServicePort=8073
-      - ei.backendServerHost=eiffel-intelligence-sourcechange
-      - ei.backendServerPort=8090    
-  
 ####### /Stop Eiffel Intelligence Source Change ###############################################################################
 
 
@@ -285,45 +259,32 @@ services:
               - eiffel-intelligence-testexecution:8090
     environment:       # Overrides settings in application config file
       - SpringApplicationName=eiffel-intelligence-testexecution
+      - server.port=8090
       - rules.path=/TestExecutionObjectRules.json
       - rabbitmq.host=myrabbitmq-rabbitmq
       - rabbitmq.port=5672
+      - rabbitmq.domainId=eiffel-sandbox
+      - rabbitmq.componentName=eiffelintelligence-testexecution
+      - rabbitmq.waitlist.queue.suffix=waitlist-testexecution
       - rabbitmq.user=myuser
       - rabbitmq.password=myuser
       - spring.data.mongodb.host=mymongodb-mongodb
       - spring.data.mongodb.port=27017
       - spring.data.mongodb.database=eiffel_intelligence-testexecution
-      - rabbitmq.componentName=eiffelintelligence-testexecution
-      - rabbitmq.waitlist.queue.suffix=waitlist-testexecution
-      - missedNotificationDataBaseName=MissedNotification-testexecution  
+      - missedNotificationDataBaseName=MissedNotification-testexecution
+      - search.query.prefix=object
+      - aggregated.object.name=aggregatedObject  
       - spring.mail.host=
       - spring.mail.port=
       - spring.mail.username=      
       - spring.mail.password=
       - pring.mail.properties.mail.smtp.auth=false
       - spring.mail.properties.mail.smtp.starttls.enable=false  
-      - er.url=http://eiffel-er:8080/search/      
+      - er.url=http://eiffel-er:8080/search/
+      - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
+      - WAIT_DB_HOSTS=mymongodb-mongodb:27017
+#      - EI_CMD_ARGS=DEBUG   
       
-  ei-frontend-testexecution:
-    restart: always
-    image: eiffelericsson/eiffel-intelligence-frontend:${EI_FRONTEND_VERSION}
-    expose:
-      - "8080"        
-    ports:
-      - "8075:8080"
-    depends_on:
-      - eiffel-intelligence-testexecution
-    networks:
-          eiffel_2.0_1:
-            aliases:
-              - ei-frontend-sourcechange:8080
-    environment:      # Overrides settings in application config file
-      - spring.application.name=eiffel-intelligence-frontend-testexecution
-      - ei.frontendServiceHost=${HOST}
-      - ei.frontendServicePort=8075
-      - ei.backendServerHost=eiffel-intelligence-testexecution
-      - ei.backendServerPort=8090    
-  
 ####### /Stop Eiffel Intelligence Test Execution ###############################################################################
 
 ####### /Start Eiffel Intelligence All Events ###############################################################################
@@ -345,8 +306,9 @@ services:
               - eiffel-intelligence-allevents:8090
     environment:       # Overrides settings in application config file
       - SpringApplicationName=eiffel-intelligence-allevents
+      - server.port=8090
       - rules.path=/all_event_rules.json
-      - rabbitmq.domainId=ei001-eiffel2
+      - rabbitmq.domainId=eiffel-sandbox
       - rabbitmq.componentName=eiffelintelligence-allevents
       - rabbitmq.waitlist.queue.suffix=waitlist-allevents
       - rabbitmq.host=myrabbitmq-rabbitmq
@@ -357,6 +319,8 @@ services:
       - spring.data.mongodb.port=27017
       - spring.data.mongodb.database=eiffel_intelligence-allevents
       - missedNotificationDataBaseName=MissedNotification-allevents
+      - search.query.prefix=object
+      - aggregated.object.name=aggregatedObject
       - spring.mail.host=mail.lmera.ericsson.se
       - spring.mail.port=25
       - spring.mail.username=
@@ -364,8 +328,16 @@ services:
       - spring.mail.properties.mail.smtp.auth=false
       - spring.mail.properties.mail.smtp.starttls.enable=false
       - er.url=http://eiffel-er:8080/search/
+      - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
+      - WAIT_DB_HOSTS=mymongodb-mongodb:27017
+#      - EI_CMD_ARGS=DEBUG
 
-  ei-frontend-allevents:
+####### /Stop Eiffel Intelligence All Events ############################################################################### 
+
+####### /Start Eiffel Intelligence Frontened ############################################################################### 
+
+
+  ei-frontend:
     restart: always
     image: eiffelericsson/eiffel-intelligence-frontend:${EI_FRONTEND_VERSION}
     expose:
@@ -374,18 +346,23 @@ services:
       - "8077:8080"
     depends_on:
       - eiffel-intelligence-allevents
+      - eiffel-intelligence-testexecution
+      - eiffel-intelligence-sourcechange
+      - eiffel-intelligence-artifact
     networks:
           eiffel_2.0_1:
             aliases:
-              - ei-frontend-sourcechange:8080
+              - ei-frontend:8080
     environment:      # Overrides settings in application config file
-      - spring.application.name=eiffel-intelligence-frontend-allevents
+      - spring.application.name=eiffel-intelligence-frontend
+      - server.port=8080
       - ei.frontendServiceHost=${HOST}
       - ei.frontendServicePort=8077
-      - ei.backendServerHost=eiffel-intelligence-allevents
-      - ei.backendServerPort=8090
+      - ei.backendInstancesFilePath=/tmp/eiInstancesListFile.json 
+      - ei.backendInstancesListJsonContent=${EI_FRONTEND_EI_INSTANCES_LIST}
+#      - EI_CMD_ARGS=DEBUG
 
-####### /Stop Eiffel Intelligence All Events ###############################################################################  
+####### /Stop Eiffel Intelligence Frontend ###############################################################################  
 
 
   eiffel-vici:
@@ -443,6 +420,24 @@ services:
     depends_on:
       myrabbitmq-rabbitmq:
           condition: service_healthy
+    environment:
+      - RABBITMQ_HOST=myrabbitmq-rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_EXCHANGE=ei-poc-4
+      - RABBITMQ_USERNAME=myuser
+      - RABBITMQ_PASSWORD=myuser
+      - RABBIT_MQ_TLS=
+      - REMREM_RABBITMQ_DOMAIN_ID=remrem
+      - GENERATE_SERVER_HOST=generate
+      - GENERATE_SERVER_PORT=8080
+      - GENERATE_SERVER_PATH=
+      - AD_ENABLED=false
+      - AD_LDAP_URL=
+      - AD_MANAGER_PASSWORD=
+      - AD_MANAGER_DN=
+      - AD_ROOT_DN=
+      - AD_USER_SEARCH_FILTER=
+      - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
     networks:
           eiffel_2.0_1:
             aliases:
@@ -473,7 +468,7 @@ services:
        - rabbitmq.host=myrabbitmq-rabbitmq
        - rabbitmq.componentName=eventrepository
        - rabbitmq.port=5672
-       - rabbitmq.domainId=er001-eiffel2xxx
+       - rabbitmq.domainId=eiffel-sandbox
        - rabbitmq.durable=true
        - rabbitmq.user=myuser
        - rabbitmq.password=myuser
@@ -525,23 +520,27 @@ services:
 #      - JAVA_OPTS="-Djava.util.logging.config.file=/var/jenkins_home/log.properties"
       - NEXUS_DESCRIPTION=mynexus3
       - NEXUS_URL=http://mynexus3:8081/
+      - NEXUS_DOWNLOAD_REPO_NAME=/repositories/maven-releases/
+      - NEXUS_UPLOAD_REPO_NAME=/repositories/maven-releases/
       - NEXUS_USER=admin
       - NEXUS_PASSWORD=admin123
       - RABBITMQ_HOST=myrabbitmq-rabbitmq
       - RABBITMQ_PORT=5672
       - RABBITMQ_EXCHANGE_NAME=ei-poc-4
-      - RABBITMQ_COMPONENT_NAME=myrabbitmq-rabbitmq
+      - RABBITMQ_COMPONENT_NAME=eiffel-jenkins1
       - RABBITMQ_PROTOCOL=amqp
-      - RABBITMQ_CREATE_EXCHANGE=false
+      - RABBITMQ_CREATE_EXCHANGE=true
       - RABBITMQ_USER=myuser
       - RABBITMQ_PASSWORD=myuser
-      - RABBITMQ_DOMAIN_ID=er001-eiffelxxx
-      - REMREM_GENERATE_URL=http://generate:8080/eiffelsemantics
-      - REMREM_PUBLISH_URL=http://publish:8080/producer/msg?mp=eiffelsemantics
+      - RABBITMQ_DOMAIN_ID=eiffel-sandbox
+      - REMREM_GENERATE_URL=http://generate:8080
+      - REMREM_PUBLISH_URL=http://publish:8080
+      - REMREM_PUBLISH_GEN_PUB_URL=http://publish:8080/generateAndpublish?mp=eiffelsemantics&parseData=false&msgType=
       - REMREM_USER=guest
       - REMREM_PASSWORD=guest
       - ER_REST_URL=http://eiffel-er:8080/
       - BYPASS_IO=false
+      - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
       - FEM_VERSION=${EIFFEL_JENKINS_VERSION}
     networks:
           eiffel_2.0_1:

@@ -47,16 +47,13 @@ To run specific services, add the service name to the command. For instance, to 
 
 This will started multiple Eiffel services and tools with Eiffel plugins. The containers of primary interest can be accessed at the exposed ports below. Note that the hostname depends on your local environment, and that all services are accessed from the host via these exposed mapped ports (`<hostname>:<port>`). The service names are only usable from within the Docker virtual network. For additional containers and detailed port configurations, please refer to <a href="docker-compose.yml">docker-compose.yml</a>.
 * <a href="https://github.com/Ericsson/eiffel-intelligence">Eiffel Intelligence Backend</a> Artifact Backend: 8070
-* <a href="https://github.com/Ericsson/eiffel-intelligence-frontend">Eiffel Intelligence Frontend</a> Artifact Frontend: 8071
 * <a href="https://github.com/Ericsson/eiffel-intelligence">Eiffel Intelligence Backend</a> Source Change Backend: 8072
-* <a href="https://github.com/Ericsson/eiffel-intelligence-frontend">Eiffel Intelligence Frontend</a> Source Change Frontend: 8073
 * <a href="https://github.com/Ericsson/eiffel-intelligence">Eiffel Intelligence Backend</a> Test Execution Backend: 8074
-* <a href="https://github.com/Ericsson/eiffel-intelligence-frontend">Eiffel Intelligence Frontend</a> Test Execution Frontend: 8075
 * <a href="https://github.com/Ericsson/eiffel-intelligence">Eiffel Intelligence Backend</a> All Events Backend: 8076
-* <a href="https://github.com/Ericsson/eiffel-intelligence-frontend">Eiffel Intelligence Frontend</a> All Events Frontend: 8077
+* <a href="https://github.com/Ericsson/eiffel-intelligence-frontend">Eiffel Intelligence Frontend</a> EI Frontend for all EI Backends: 8077
 * <a href="https://www.sonatype.com/nexus-repository-sonatype">Nexus Repository</a>: 8081 (admin/admin123)
-* <a href="https://jenkins.io">Jenkins</a> 1 with <a href="https://github.com/eiffel-community/eiffel-jenkins-plugin">Eiffel Jenkins Plugin</a>: 8082
-* <a href="https://jenkins.io">Jenkins</a> 2 with <a href="https://github.com/eiffel-community/eiffel-jenkins-plugin">Eiffel Jenkins Plugin</a>: 8083
+* <a href="https://jenkins.io">Jenkins</a> 1 with <a href="https://github.com/eiffel-community/eiffel-jenkins-plugin">Eiffel Jenkins Plugin</a>: 8082 (admin/admin)
+* <a href="https://jenkins.io">Jenkins</a> 2 with <a href="https://github.com/eiffel-community/eiffel-jenkins-plugin">Eiffel Jenkins Plugin</a>: 8083 (admin/admin)
 * <a href="https://github.com/eiffel-community/eiffel-vici">Eiffel Vici</a>: 8092
 * <a href="https://github.com/eiffel-community/eiffel-event-repository">Eiffel Event Repository</a>: 8084
 * <a href="https://github.com/Ericsson/eiffel-remrem">Remrem</a> Generate: 8095

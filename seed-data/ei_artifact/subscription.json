@@ -1,10 +1,10 @@
-[  
+[
   {
-    "subscriptionName" : "Subscription1",
-	"repeat" : false,
+    "subscriptionName" : "Subscription1_FEM_JENKINS",
+    "repeat" : false,
     "created" : 1523473956269,
-	"notificationType" : "REST_POST",
-	"notificationMeta" : "http://eiffel-jenkins1:8080/job/ei-artifact-triggered-job/build",
+    "notificationType" : "REST_POST",
+    "notificationMeta" : "http://eiffel-jenkins1:8080/job/ei-artifact-triggered-job/build",
     "restPostBodyMediaType" : "application/x-www-form-urlencoded",
     "notificationMessageKeyValues" : [
         {
@@ -12,23 +12,26 @@
             "formvalue" : "{parameter: [{ name: 'jsonparams', value : to_string(@) }]}"
         }
     ],
-    "requirements" : [ 
+    "requirements" : [
         {
-            "conditions" : [ 
+            "conditions" : [
                 {
                     "jmespath" : "gav.groupId=='com.othercompany.library'"
                 }
             ]
         }
-    ]
-    
+    ],
+    "userName" : "admin",
+    "password" : "admin",
+    "notificationMessageKeyValuesAuth" : [],
+    "authenticationType" : "BASIC_AUTH"
 },
 {
-    "subscriptionName" : "Subscription2",
-	"repeat" : false,
+    "subscriptionName" : "Subscription2_FEM_JENKINS",
+    "repeat" : false,
     "created" : 1523473956269,
-	"notificationType" : "REST_POST",
-	"notificationMeta" : "http://eiffel-jenkins1:8080/job/ei-artifact-triggered-parameterized-job/build",
+    "notificationType" : "REST_POST",
+    "notificationMeta" : "http://eiffel-jenkins1:8080/job/ei-artifact-triggered-parameterized-job/build",
     "restPostBodyMediaType" : "application/x-www-form-urlencoded",
     "notificationMessageKeyValues" : [
         {
@@ -36,63 +39,18 @@
             "formvalue" : "{parameter: [{ name: 'jsonparams', value : to_string(@) }]}"
         }
     ],
-    "requirements" : [ 
+    "requirements" : [
         {
-            "conditions" : [ 
+            "conditions" : [
                 {
                     "jmespath" : "gav.groupId=='com.othercompany.library'"
                 }
             ]
-        }
-    ]
-    
-},
-{
-    "subscriptionName" : "Subscription3",
-	"repeat" : false,
-    "created" : 1523473956269,
-	"notificationType" : "REST_POST",
-	"notificationMeta" : "http://eiffel-jenkins2:8080/job/ei-artifact-triggered-job/build",
-    "restPostBodyMediaType" : "application/x-www-form-urlencoded",
-    "notificationMessageKeyValues" : [
-        {
-            "formkey" : "json",
-            "formvalue" : "{parameter: [{ name: 'jsonparams', value : to_string(@) }]}"
         }
     ],
-    "requirements" : [ 
-        {
-            "conditions" : [ 
-                {
-                    "jmespath" : "gav.groupId=='com.othercompany.library'"
-                }
-            ]
-        }
-    ]
-    
-},
-{
-    "subscriptionName" : "Subscription4",
-	"repeat" : false,
-    "created" : 1523473956269,
-	"notificationType" : "REST_POST",
-	"notificationMeta" : "http://eiffel-jenkins2:8080/job/ei-artifact-triggered-parameterized-job/build",
-    "restPostBodyMediaType" : "application/x-www-form-urlencoded",
-    "notificationMessageKeyValues" : [
-        {
-            "formkey" : "json",
-            "formvalue" : "{parameter: [{ name: 'jsonparams', value : to_string(@) }]}"
-        }
-    ],
-    "requirements" : [ 
-        {
-            "conditions" : [ 
-                {
-                    "jmespath" : "gav.groupId=='com.othercompany.library'"
-                }
-            ]
-        }
-    ]
-    
+    "userName" : "admin",
+    "password" : "admin",
+    "notificationMessageKeyValuesAuth" : [],
+    "authenticationType" : "BASIC_AUTH"
 }
 ]
