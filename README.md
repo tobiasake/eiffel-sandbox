@@ -51,7 +51,8 @@ This will started multiple Eiffel services and tools with Eiffel plugins. The co
 * <a href="https://github.com/Ericsson/eiffel-intelligence">Eiffel Intelligence Backend</a> Test Execution Backend: 8074
 * <a href="https://github.com/Ericsson/eiffel-intelligence">Eiffel Intelligence Backend</a> All Events Backend: 8076
 * <a href="https://github.com/Ericsson/eiffel-intelligence-frontend">Eiffel Intelligence Frontend</a> EI Frontend for all EI Backends: 8077</br>
-NOTE!: Do not use 'localhost' in web-browser when accessing Eiffel Intelligence Frontend web page, Switch backend functionality do not work when using 'localhost' address. Use instead Docker Host Ip address instead.
+NOTE!: Do not use 'localhost' in web-browser when accessing Eiffel Intelligence Frontend web page.</br>
+Switch backend functionality do not work when using 'localhost' address. Use Docker Host Ip address instead.
 * <a href="https://www.sonatype.com/nexus-repository-sonatype">Nexus Repository</a>: 8081 (admin/admin123)
 * <a href="https://jenkins.io">Jenkins</a> 1 with <a href="https://github.com/eiffel-community/eiffel-jenkins-plugin">Eiffel Jenkins Plugin</a>: 8082 (admin/admin)
 * <a href="https://jenkins.io">Jenkins</a> 2 with <a href="https://github.com/eiffel-community/eiffel-jenkins-plugin">Eiffel Jenkins Plugin</a>: 8083 (admin/admin)
