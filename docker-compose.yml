@@ -46,7 +46,7 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - mymongodb-mongodb:27017
+              - mymongodb-mongodb
   mongo-seed:
     image: mongo:${MONGODB_VERSION}
     links:
@@ -121,7 +121,7 @@ services:
               
   myrabbitmq-rabbitmq:
     restart: always
-    image: rabbitmq:${RABBITMQ_VERSION}
+    image: bitnami/rabbitmq:${RABBITMQ_VERSION}
     expose:
       - "15672"
       - "5672"    
@@ -136,12 +136,11 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - myrabbitmq-rabbitmq:5672
-              - myrabbitmq-rabbitmq:15672
+              - myrabbitmq-rabbitmq
     environment:
-      - RABBITMQ_DEFAULT_PASS=myuser
-      - RABBITMQ_DEFAULT_USER=myuser
-      - RABBITMQ_DEFAULT_VHOST=/
+      - RABBITMQ_USERNAME=myuser
+      - RABBITMQ_PASSWORD=myuser
+      - RABBITMQ_VHOST=/
  
  
   ####### /Start Eiffel Intelligence Artifact ###############################################################################
@@ -149,9 +148,9 @@ services:
     restart: always
     image: eiffelericsson/eiffel-intelligence-backend:${EI_BACKEND_VERSION}
     expose:
-      - "8090"        
+      - "8080"        
     ports:
-      - "8070:8090"
+      - "8070:8080"
     depends_on:
       mymongodb-mongodb:
           condition: service_healthy
@@ -160,10 +159,10 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - eiffel-intelligence-artifact:8090
+              - eiffel-intelligence-artifact
     environment:       # Overrides settings in application config file
       - SpringApplicationName=eiffel-intelligence-artifact
-      - server.port=8090
+      - server.port=8080
       - rules.path=/ArtifactRules_new.json
       - rabbitmq.host=myrabbitmq-rabbitmq
       - rabbitmq.port=5672
@@ -185,9 +184,11 @@ services:
       - spring.mail.properties.mail.smtp.auth=false
       - spring.mail.properties.mail.smtp.starttls.enable=false   
       - er.url=http://eiffel-er:8080/search/
+      - logging.level.root=OFF
+      - logging.level.org.springframework.web=ERROR
+      - logging.level.com.ericsson.ei=ERROR
       - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
-      - WAIT_DB_HOSTS=mymongodb-mongodb:27017
-#      - EI_CMD_ARGS=DEBUG    
+      - WAIT_DB_HOSTS=mymongodb-mongodb:27017 
       
 ####### /Stop Eiffel Intelligence Artifact ###############################################################################
 
@@ -197,9 +198,9 @@ services:
     restart: always
     image: eiffelericsson/eiffel-intelligence-backend:${EI_BACKEND_VERSION}
     expose:
-      - "8090"        
+      - "8080"        
     ports:
-      - "8072:8090"
+      - "8072:8080"
     depends_on:
       mymongodb-mongodb:
           condition: service_healthy
@@ -208,10 +209,10 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - eiffel-intelligence-sourcechange:8090
+              - eiffel-intelligence-sourcechange
     environment:       # Overrides settings in application config file
       - SpringApplicationName=eiffel-intelligence-sourcechange
-      - server.port=8090
+      - server.port=8080
       - rules.path=/TestSourceChangeObjectRules.json
       - rabbitmq.host=myrabbitmq-rabbitmq
       - rabbitmq.port=5672
@@ -233,6 +234,9 @@ services:
       - pring.mail.properties.mail.smtp.auth=false
       - spring.mail.properties.mail.smtp.starttls.enable=false  
       - er.url=http://eiffel-er:8080/search/
+      - logging.level.root=OFF
+      - logging.level.org.springframework.web=ERROR
+      - logging.level.com.ericsson.ei=ERROR
       - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
       - WAIT_DB_HOSTS=mymongodb-mongodb:27017
 #      - EI_CMD_ARGS=DEBUG 
@@ -245,9 +249,9 @@ services:
     restart: always
     image: eiffelericsson/eiffel-intelligence-backend:${EI_BACKEND_VERSION}
     expose:
-      - "8090"        
+      - "8080"        
     ports:
-      - "8074:8090"
+      - "8074:8080"
     depends_on:
       mymongodb-mongodb:
           condition: service_healthy
@@ -256,10 +260,10 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - eiffel-intelligence-testexecution:8090
+              - eiffel-intelligence-testexecution
     environment:       # Overrides settings in application config file
       - SpringApplicationName=eiffel-intelligence-testexecution
-      - server.port=8090
+      - server.port=8080
       - rules.path=/TestExecutionObjectRules.json
       - rabbitmq.host=myrabbitmq-rabbitmq
       - rabbitmq.port=5672
@@ -278,12 +282,14 @@ services:
       - spring.mail.port=
       - spring.mail.username=      
       - spring.mail.password=
-      - pring.mail.properties.mail.smtp.auth=false
+      - spring.mail.properties.mail.smtp.auth=false
       - spring.mail.properties.mail.smtp.starttls.enable=false  
       - er.url=http://eiffel-er:8080/search/
+      - logging.level.root=OFF
+      - logging.level.org.springframework.web=ERROR
+      - logging.level.com.ericsson.ei=ERROR
       - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
       - WAIT_DB_HOSTS=mymongodb-mongodb:27017
-#      - EI_CMD_ARGS=DEBUG   
       
 ####### /Stop Eiffel Intelligence Test Execution ###############################################################################
 
@@ -292,9 +298,9 @@ services:
     restart: always
     image: eiffelericsson/eiffel-intelligence-backend:${EI_BACKEND_VERSION}
     expose:
-      - "8090"
+      - "8080"
     ports:
-      - "8076:8090"
+      - "8076:8080"
     depends_on:
       mymongodb-mongodb:
           condition: service_healthy
@@ -303,10 +309,10 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - eiffel-intelligence-allevents:8090
+              - eiffel-intelligence-allevents
     environment:       # Overrides settings in application config file
       - SpringApplicationName=eiffel-intelligence-allevents
-      - server.port=8090
+      - server.port=8080
       - rules.path=/all_event_rules.json
       - rabbitmq.domainId=eiffel-sandbox
       - rabbitmq.componentName=eiffelintelligence-allevents
@@ -328,9 +334,11 @@ services:
       - spring.mail.properties.mail.smtp.auth=false
       - spring.mail.properties.mail.smtp.starttls.enable=false
       - er.url=http://eiffel-er:8080/search/
+      - logging.level.root=OFF
+      - logging.level.org.springframework.web=ERROR
+      - logging.level.com.ericsson.ei=ERROR
       - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
       - WAIT_DB_HOSTS=mymongodb-mongodb:27017
-#      - EI_CMD_ARGS=DEBUG
 
 ####### /Stop Eiffel Intelligence All Events ############################################################################### 
 
@@ -352,7 +360,7 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - ei-frontend:8080
+              - ei-frontend
     environment:      # Overrides settings in application config file
       - spring.application.name=eiffel-intelligence-frontend
       - server.port=8080
@@ -360,7 +368,9 @@ services:
       - ei.frontendServicePort=8077
       - ei.backendInstancesFilePath=/tmp/eiInstancesListFile.json 
       - ei.backendInstancesListJsonContent=${EI_FRONTEND_EI_INSTANCES_LIST}
-#      - EI_CMD_ARGS=DEBUG
+      - logging.level.root=OFF
+      - logging.level.org.springframework.web=ERROR
+      - logging.level.com.ericsson.ei=ERROR
 
 ####### /Stop Eiffel Intelligence Frontend ###############################################################################  
 
@@ -375,7 +385,7 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - eiffel-vici:8080
+              - eiffel-vici
   dummy-er:
     restart: always
     image: eiffelericsson/dummy-er:${DUMMY_ER_VERSION}
@@ -389,7 +399,7 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - dummy-er:8081
+              - dummy-er
     environment:       # Overrides settings in application config file
       - mongodb=true
       - mongodb.host=mymongodb-mongodb
@@ -403,11 +413,23 @@ services:
     expose:
       - "8080"        
     ports:
-      - "8095:8080"            
+      - "8095:8080"
+    environment:
+      - server.port=8080
+      - jasypt.encryptor.password=
+      - activedirectory.generate.enabled=false
+      - activedirectory.ldapUrl=
+      - activedirectory.managerPassword=
+      - activedirectory.managerDn=
+      - activedirectory.rootDn=
+      - activedirectory.userSearchFilter=
+      - logging.level.root=INFO
+      - logging.level.org.springframework.web=INFO
+      - logging.level.com.ericsson.eiffel.remrem.producer=INFO
     networks:
           eiffel_2.0_1:
             aliases:
-              - generate:8080
+              - generate
    
   
   publish:  
@@ -421,27 +443,25 @@ services:
       myrabbitmq-rabbitmq:
           condition: service_healthy
     environment:
-      - RABBITMQ_HOST=myrabbitmq-rabbitmq
-      - RABBITMQ_PORT=5672
-      - RABBITMQ_EXCHANGE=ei-poc-4
-      - RABBITMQ_USERNAME=myuser
-      - RABBITMQ_PASSWORD=myuser
-      - RABBIT_MQ_TLS=
-      - REMREM_RABBITMQ_DOMAIN_ID=remrem
-      - GENERATE_SERVER_HOST=generate
-      - GENERATE_SERVER_PORT=8080
-      - GENERATE_SERVER_PATH=
-      - AD_ENABLED=false
-      - AD_LDAP_URL=
-      - AD_MANAGER_PASSWORD=
-      - AD_MANAGER_DN=
-      - AD_ROOT_DN=
-      - AD_USER_SEARCH_FILTER=
+      - server.port=8080
+      - jasypt.encryptor.password=
+      - rabbitmq.instances.jsonlist=${EIFFEL2_REMREM_PUBLISH_RABBITMQ_INSTANCES_LIST}
+      - generate.server.uri=http://generate:8080
+      - generate.server.path=
+      - activedirectory.publish.enabled=false
+      - activedirectory.ldapUrl=
+      - activedirectory.managerPassword=
+      - activedirectory.managerDn=
+      - activedirectory.rootDn=
+      - activedirectory.userSearchFilter=
+      - logging.level.root=INFO
+      - logging.level.org.springframework.web=INFO
+      - logging.level.com.ericsson.eiffel.remrem.producer=INFO
       - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
     networks:
           eiffel_2.0_1:
             aliases:
-              - publish:8080
+              - publish
        
   eiffel-er:
     restart: always
@@ -459,7 +479,7 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - eiffel-er:8080 
+              - eiffel-er 
     environment:   # Overrides settings in config file in catalina folder. OBS --> skip quotes for rabbitmq.bindingKey value  
                    # No config file copied to catalina folder in Dockerfile, only uses env vars below ;-)
                    # /eventrepository removed in contextpath
@@ -496,8 +516,9 @@ services:
        - index.dynamicIndex.maxIndexesCount=5
        - index.dynamicIndex.filePath=src/main/resources/dynamic_indexing.json
        - index.dynamicIndex.fileUpdatePeriod=30
-     
-               
+       - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
+       - WAIT_DB_HOSTS=mymongodb-mongodb:27017
+        
   eiffel-jenkins1:
     restart: always
     image: eiffelericsson/eiffel-jenkins:${EIFFEL_JENKINS_VERSION}
@@ -545,8 +566,7 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - eiffel-jenkins1:8080 
-              - eiffel-jenkins1:50000
+              - eiffel-jenkins1 
 #    volumes:                                   
 #      - jenkins_home:/var/jenkins_home       
        
@@ -571,8 +591,7 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - eiffel-jenkins2:8080 
-              - eiffel-jenkins2:50000
+              - eiffel-jenkins2 
 #    volumes:                                   
 #      - jenkins_home:/var/jenkins_home   
 
@@ -590,7 +609,7 @@ services:
     networks:
           eiffel_2.0_1:
             aliases:
-              - mynexus3:8081
+              - mynexus3
     
 #    volumes:                                   
 #      - /opt/my-nexus-data:/nexus-data       
