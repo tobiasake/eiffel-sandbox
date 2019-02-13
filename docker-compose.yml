@@ -167,6 +167,7 @@ services:
       - rabbitmq.host=myrabbitmq-rabbitmq
       - rabbitmq.port=5672
       - rabbitmq.domainId=eiffel-sandbox
+      - rabbitmq.exchange.name=ei-poc-4
       - rabbitmq.componentName=eiffelintelligence-artifact
       - rabbitmq.waitlist.queue.suffix=waitlist-artifact    
       - rabbitmq.user=myuser
@@ -217,6 +218,7 @@ services:
       - rabbitmq.host=myrabbitmq-rabbitmq
       - rabbitmq.port=5672
       - rabbitmq.domainId=eiffel-sandbox
+      - rabbitmq.exchange.name=ei-poc-4
       - rabbitmq.componentName=eiffelintelligence-sourcechange
       - rabbitmq.waitlist.queue.suffix=waitlist-sourcechange
       - rabbitmq.user=myuser
@@ -268,6 +270,7 @@ services:
       - rabbitmq.host=myrabbitmq-rabbitmq
       - rabbitmq.port=5672
       - rabbitmq.domainId=eiffel-sandbox
+      - rabbitmq.exchange.name=ei-poc-4
       - rabbitmq.componentName=eiffelintelligence-testexecution
       - rabbitmq.waitlist.queue.suffix=waitlist-testexecution
       - rabbitmq.user=myuser
@@ -315,6 +318,7 @@ services:
       - server.port=8080
       - rules.path=/all_event_rules.json
       - rabbitmq.domainId=eiffel-sandbox
+      - rabbitmq.exchange.name=ei-poc-4
       - rabbitmq.componentName=eiffelintelligence-allevents
       - rabbitmq.waitlist.queue.suffix=waitlist-allevents
       - rabbitmq.host=myrabbitmq-rabbitmq
