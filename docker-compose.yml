@@ -187,7 +187,7 @@ services:
       - er.url=http://eiffel-er:8080/search/
       - logging.level.root=OFF
       - logging.level.org.springframework.web=ERROR
-      - logging.level.com.ericsson.ei=ERROR
+      - logging.level.com.ericsson.ei=DEBUG
       - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
       - WAIT_DB_HOSTS=mymongodb-mongodb:27017 
       
@@ -238,7 +238,7 @@ services:
       - er.url=http://eiffel-er:8080/search/
       - logging.level.root=OFF
       - logging.level.org.springframework.web=ERROR
-      - logging.level.com.ericsson.ei=ERROR
+      - logging.level.com.ericsson.ei=DEBUG
       - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
       - WAIT_DB_HOSTS=mymongodb-mongodb:27017
 #      - EI_CMD_ARGS=DEBUG 
@@ -290,7 +290,7 @@ services:
       - er.url=http://eiffel-er:8080/search/
       - logging.level.root=OFF
       - logging.level.org.springframework.web=ERROR
-      - logging.level.com.ericsson.ei=ERROR
+      - logging.level.com.ericsson.ei=DEBUG
       - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
       - WAIT_DB_HOSTS=mymongodb-mongodb:27017
       
@@ -340,7 +340,7 @@ services:
       - er.url=http://eiffel-er:8080/search/
       - logging.level.root=OFF
       - logging.level.org.springframework.web=ERROR
-      - logging.level.com.ericsson.ei=ERROR
+      - logging.level.com.ericsson.ei=DEBUG
       - WAIT_MB_HOSTS=myrabbitmq-rabbitmq:15672
       - WAIT_DB_HOSTS=mymongodb-mongodb:27017
 
@@ -368,13 +368,15 @@ services:
     environment:      # Overrides settings in application config file
       - spring.application.name=eiffel-intelligence-frontend
       - server.port=8080
-      - ei.frontendServiceHost=${HOST}
-      - ei.frontendServicePort=8077
-      - ei.backendInstancesFilePath=/tmp/eiInstancesListFile.json 
-      - ei.backendInstancesListJsonContent=${EI_FRONTEND_EI_INSTANCES_LIST}
+      - ei.frontend.service.host=${HOST}
+      - ei.frontend.service.port=8077
+      - ei.frontend.context.path=
+      - ei.use.secure.http.frontend=false
+      - ei.backend.instances.filepath=/tmp/eiInstancesListFile.json 
+      - ei.backend.instances.list.json.content=${EI_FRONTEND_EI_INSTANCES_LIST}
       - logging.level.root=OFF
-      - logging.level.org.springframework.web=ERROR
-      - logging.level.com.ericsson.ei=ERROR
+      - logging.level.org.springframework.web=DEBUG
+      - logging.level.com.ericsson.ei=DEBUG
 
 ####### /Stop Eiffel Intelligence Frontend ###############################################################################  
 
